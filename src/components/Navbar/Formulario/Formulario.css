@@ -1,0 +1,11 @@
+*{
+    color: aliceblue;
+}
+
+.field-input{
+    background-color: transparent !important;
+    color: aliceblue !important;
+}
+.field-input:focus{
+    background-color: transparent !important;
+}

@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Formik,Field,Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import ModalBs from 'react-bootstrap/Modal';
 import FromBs from 'react-bootstrap/Form';
+import { ItemsContext, UPLOAD_ITEMS } from '../../context/itemsConstext';
+import { axiosInstance } from '../../services/axios.config';
 
 const Modal = (props) => {
+
+    const {items, dispatch} = useContext(ItemsContext)
 
     const initialValues = {
         name: props.item.name || '',
@@ -46,7 +50,22 @@ const Modal = (props) => {
             validationSchema={validationSchema}
             onSubmit={ async (values, {setSubmitting}) => {
                 console.log(values);
-                await props.onSubmit(props.item.id, values)
+                //await props.onSubmit(props.item.id, values)
+                axiosInstance.put(`/${props.item.id}`, values)
+                  .then( r => {
+                    if(r.status === 200){
+                        const itemsUpload = items.map(item => {
+                          if(item.id === r.data.id){
+                            return r.data
+                          }
+                          return item
+                        })
+                      dispatch({type: UPLOAD_ITEMS, payload: itemsUpload})
+                      }else {
+                        throw new Error(`[ERROR ${r.status}] Error en la solicitud`)
+                      }
+                  })
+                  .catch(err => console.log(err))
                 setSubmitting(false)
                 props.onHide()
             }}
@@ -114,7 +133,7 @@ const Modal = (props) => {
       </Formik>
         </ModalBs.Body>
         <ModalBs.Footer className='bg-dark'>
-            <Button onClick={props.onHide}>Close</Button>
+            <Button onClick={props.onHide}>Cerrar</Button>
         </ModalBs.Footer>
       </ModalBs>
   )

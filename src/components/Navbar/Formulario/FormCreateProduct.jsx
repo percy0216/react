@@ -23,7 +23,7 @@ const FormCreateProduct = () => {
       .required('El campo es obligatorio'),
     description: Yup.string()
       .min(8,'Descripcion demasiado corta')
-      .max(100, 'Descripcion demasiado largo')
+      .max(400, 'Descripcion demasiado largo')
       .required('El campo es obligatorio'),
     image: Yup.string().required('Campo obligatorio'),
     stock: Yup.number().required('Campo obligatorio'),

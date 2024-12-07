@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
       <NavbarBs bg="dark" data-bs-theme="dark">
           <Container fluid>
-              <NavbarBs.Brand href="#home">Tienda</NavbarBs.Brand>
+              <NavbarBs.Brand href="#home">Biblioteca</NavbarBs.Brand>
               <Nav className="nav-container justify-content-evenly">
                   <Nav.Item>
                       <Link to='/' style={{color: '#fff', textDecoration:'none'}}> Home </Link>

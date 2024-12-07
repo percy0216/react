@@ -1,18 +1,20 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { axiosInstance } from '../services/axios.config';
 import Table from '../components/Navbar/Table/table';
-
+import { ItemsContext, UPLOAD_ITEMS } from '../context/itemsConstext';
 
 const ShowProduct = () => {
 
-  const [items, setItems] = useState([])
+  //const [items, setItems] = useState([])
+  const { items, dispatch } = useContext(ItemsContext)
 
   useEffect(() => {
     axiosInstance.get('/')
       .then(r => {
         if (r.status === 200) {
-          setItems(r.data)
+          //setItems(r.data)
+          dispatch({ type: UPLOAD_ITEMS, payload: r.data })
         } else {
           throw new Error(`[${r.status}]ERROR en la solicitud`)
         }
@@ -20,7 +22,7 @@ const ShowProduct = () => {
       .catch(err => console.log(err))
   }, [])
 
-  const editItem = (id, data) => {
+  /*const editItem = (id, data) => {
     console.log('editando...')
     axiosInstance.put(`/${id}`,data)
       .then(r => {
@@ -39,21 +41,28 @@ const ShowProduct = () => {
         }
       })
       .catch(err => console.log(err))
-  }
+  }*/
 
   return (
-    <div>
-        <h1 style={{textAlign: 'center'}}> Productos en sistema </h1>
-        
+    <>
+      <div>
+        <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h1 style={{ textAlign: 'center', flex: 1 }}>Libros en sistema</h1>
+          <input className='textsearch' type="text" style={{ marginLeft: 'auto' }} 
+          placeholder='Buscar...' />
+          <i className="bi bi-search" style={{marginRight: '20px', cursor: 'pointer'}}></i>
+        </div>
+
         <div className='container mt-3' >
           {
-            items.length > 0 ?              
-                <Table items={items} editItem={editItem} />
-            :
-            <h2 style={{textAlign: 'center'}}>No hay productos en el sistema</h2>
+            items.length > 0 ?
+              <Table items={items} />
+              :
+              <h2 style={{ textAlign: 'center' }}>No hay libros en el sistema</h2>
           }
         </div>
-    </div>
+      </div>
+    </>
   )
 }
 
